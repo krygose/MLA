@@ -30,12 +30,12 @@ class Block:
     out = self.bn1(self.conv1(x)).relu()
     out = self.bn2(self.conv2(out))
     
-    # Residual path (downsampling if necessary)
+    # Residual path 
     residual = x
     for layer in self.downsample:
       residual = layer(residual)
     
-    # Combine paths (no in-place operation)
+    # Combine paths 
     out = out + residual
     return out.relu()
 
@@ -47,7 +47,7 @@ class Model4:
         self.conv = nn.Conv2d(1, 4, kernel_size=5, stride=1, padding=2)  
         self.relu = Tensor.relu
 
-        # Dynamically generate 50 blocks
+        # Dynamically generate n blocks
         self.blocks = self._generate_blocks(num_blocks=40)
 
         
@@ -64,7 +64,6 @@ class Model4:
         ]
 
     def _generate_blocks(self, num_blocks):
-        """Generates a list of Block instances with varying dimensions."""
         blocks = []
         in_channels = 4  # Start with 2 channels (matches initial conv output)
         for i in range(num_blocks):
@@ -74,7 +73,6 @@ class Model4:
         return blocks
 
     def _forward_blocks(self, x):
-        """Passes the dummy input through the blocks to calculate the output shape."""
         for block in self.blocks:
             x = block(x)
         return x
